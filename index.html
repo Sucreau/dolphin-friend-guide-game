@@ -1,0 +1,3431 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>中华白海豚交友指南</title>
+
+<style>
+
+body{
+    margin:0;
+    overflow:hidden;
+    background:#000;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+/* ⭐固定画布 */
+#scene{
+    width:1920px;
+    height:1080px;
+    position:relative;
+    background-size:cover;
+    background-position:left top;
+    background-repeat:no-repeat;
+}
+
+/* 物体 */
+.item{
+    position:absolute;
+    cursor:pointer;
+    z-index:100;
+}
+
+/* 你的原始物体（不动） */
+.boat {
+    left: 830px;
+    top: 190px;
+    width: 300px;
+    animation: floatUpDown 4s ease-in-out infinite;
+}
+
+.bird {
+    left: 300px;
+    top: 90px;
+    width: 350px;
+    animation: floatLeftRight 3s ease-in-out infinite;
+}
+
+.shells {
+    left: 350px;
+    top: 800px;
+    width: 280px;
+    animation: shake 2.5s ease-in-out infinite;
+}
+
+.footprints{
+
+left:300px;
+top:700px;
+width:200px;
+
+display:none;
+
+animation:shake 2.5s ease-in-out infinite;
+
+}
+
+.speedboat{
+
+left:1100px;
+top:300px;
+width:300px;
+
+display:none;
+
+animation:floatUpDown 4s ease-in-out infinite;
+
+}
+
+.telescope{
+
+left:800px;
+top:720px;
+width:250px;
+
+display:none;
+
+animation:shake 2.5s ease-in-out infinite;
+
+}
+
+.dorsalfin{
+
+left:1300px;
+top:480px;
+width:240px;
+
+display:none;
+
+opacity:1;
+
+transition:opacity 1s ease;
+
+animation:dorsalSwim 6s linear infinite;
+
+}
+
+.dorsalFast{
+
+animation-duration:2s;
+
+}
+
+.fadeAway{
+
+opacity:0 !important;
+
+pointer-events:none;
+
+}
+
+.dorsalToBoat{
+
+animation:none !important;
+
+transition:
+left 2s ease,
+top 2s ease,
+opacity 0.5s ease;
+
+}
+
+.dorsalFloat{
+
+animation:floatUpDown 2.5s ease-in-out infinite !important;
+
+}
+
+.school{
+
+left:300px;
+top:670px;
+width:470px;
+
+display:none;
+
+opacity:1;
+
+transition:opacity 1s ease;
+
+animation:floatLeftRight 3s ease-in-out infinite;
+
+}
+
+.boatfishnet{
+
+left:430px;
+top:240px;
+width:550px;
+
+display:none;
+
+opacity:1;
+
+transition:opacity 1s ease;
+
+animation:floatUpDown 4s ease-in-out infinite;
+
+}
+
+.jellyfish{
+
+left:300px;
+top:420px;
+width:320px;
+
+display:none;
+
+opacity:1;
+
+transition:opacity 0.3s ease;
+
+animation:floatUpDown 4s ease-in-out infinite;
+
+}
+
+.anemone{
+
+left:1000px;
+top:600px;
+width:320px;
+
+display:none;
+
+opacity:1;
+
+transition:opacity 0.3s ease;
+
+animation:floatUpDown 3.5s ease-in-out infinite;
+
+}
+
+.noise{
+
+left:180px;
+top:120px;
+width:300px;
+
+display:none;
+
+opacity:1;
+
+transition:opacity 1s ease;
+
+animation:noisePulse 2s ease-in-out infinite;
+
+}
+
+@keyframes noisePulse{
+
+0%{
+    transform:scale(1);
+}
+
+50%{
+    transform:scale(1.08);
+}
+
+100%{
+    transform:scale(1);
+}
+
+}
+
+@keyframes floatUpDown {
+    0%   { transform: translateY(0px); }
+    50%  { transform: translateY(-12px); }
+    100% { transform: translateY(0px); }
+}
+
+@keyframes floatLeftRight {
+    0%   { transform: translateX(0px); }
+    50%  { transform: translateX(15px); }
+    100% { transform: translateX(0px); }
+}
+
+@keyframes shake {
+    0%   { transform: rotate(0deg); }
+    50%  { transform: rotate(5deg); }
+    100% { transform: rotate(0deg); }
+}
+
+@keyframes dorsalSwim{
+
+0%{
+    transform:translateX(0px) scaleX(1);
+}
+
+45%{
+    transform:translateX(-180px) scaleX(1);
+}
+
+50%{
+    transform:translateX(-180px) scaleX(-1);
+}
+
+95%{
+    transform:translateX(0px) scaleX(-1);
+}
+
+100%{
+    transform:translateX(0px) scaleX(1);
+}
+
+}
+
+#dialogBox{
+    position:absolute;
+    left:50%;
+    bottom:30px;
+    transform:translateX(-50%);
+
+    width:800px;
+
+    background:rgba(255,255,255,0.6);
+
+    border:5px solid #5BBCE6;
+
+    border-radius:25px;
+
+    padding:25px;
+
+    display:none;
+
+    z-index:999;
+
+    box-shadow:0 8px 20px rgba(0,0,0,0.25);
+
+    animation: dialogAppear 0.3s ease;
+}
+
+#dialogTitle{
+    font-size:30px;
+    font-weight:bold;
+    color:#1F6F8B;
+    margin-bottom:12px;
+}
+
+#dialogText{
+    font-size:24px;
+    line-height:1.8;
+    color:#333;
+}
+
+#dialogBox button{
+    margin-top:20px;
+
+    font-size:20px;
+
+    border:none;
+
+    background:#5BBCE6;
+
+    color:white;
+
+    padding:10px 25px;
+
+    border-radius:15px;
+
+    cursor:pointer;
+}
+
+@keyframes dialogAppear{
+    from{
+        opacity:0;
+        transform:translateX(-50%) translateY(20px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateX(-50%) translateY(0);
+    }
+}
+
+#continueHint{
+
+margin-top:20px;
+
+text-align:right;
+
+font-size:18px;
+
+color:#888;
+
+font-style:italic;
+
+}
+
+/* =========================
+   常驻卷轴
+========================= */
+
+#taskScroll{
+
+position:absolute;
+
+bottom:0px;
+right:0px;
+
+width:500px;
+
+cursor:pointer;
+
+z-index:200;
+
+animation: scrollFloat 3s ease-in-out infinite;
+
+}
+
+#taskScroll img{
+
+width:100%;
+
+display:block;
+
+}
+
+#taskTitle{
+    position:absolute;
+    top:45%;
+    left:50%;
+    transform:translateX(-50%);
+    width:70%;
+    text-align:center;
+    font-size:30px;
+    color:#976437;
+    font-weight:bold;
+}
+#currentTaskText{
+    position:absolute;
+    top:60%;
+    left:50%;
+    transform:translateX(-50%);
+    width:80%;
+    text-align:center;
+    font-size:45px;
+    color:#7e462e;
+    font-weight:bold;
+}
+
+/* =========================
+遮罩
+========================= */
+
+#overlay{
+
+position:fixed;
+
+left:0;
+top:0;
+
+width:100%;
+height:100%;
+
+background:rgba(0,0,0,0.3);
+
+display:none;
+
+z-index:998;
+
+}
+
+/* =========================
+全任务面板
+========================= */
+
+#checklistPanel{
+    position:fixed;
+    left:50%;
+    top:50%;
+    transform:translate(-50%,-50%)scaleY(0);
+    transform-origin: center;
+    color:#7c3f1c;
+    line-height:3;
+    font-size:20px;
+
+    width:520px;
+
+    /* ⭐背景改成更柔和的羊皮纸感 */
+    background:#f6e7c8;
+
+    border:4px solid #b8925a;
+
+    border-radius:18px;
+
+    padding:30px;
+
+    display:block;
+
+    z-index:999;
+
+    /* ⭐轻微阴影，让它浮起来 */
+    box-shadow:0 10px 25px rgba(0,0,0,0.25);
+    transition: transform 0.3s ease;
+}
+
+@keyframes scrollFloat {
+    0%   { transform: translateY(0px); }
+    50%  { transform: translateY(-8px); }
+    100% { transform: translateY(0px); }
+}
+#checklistPanel.open{
+    transform:translate(-50%,-50%) scaleY(1);
+}
+#checklistPanel h2{
+    font-size:30px;
+    font-weight:bold;
+    text-align:center;
+    margin-bottom:20px;
+}
+#mainMenu{
+
+width:1920px;
+height:1080px;
+
+position:relative;
+
+background-image:url("images/scene/sky.PNG");
+
+background-size:cover;
+
+background-position:left top;
+
+background-repeat:no-repeat;
+
+overflow:hidden;
+
+z-index:5000;
+}
+#logo{
+
+position:absolute;
+
+left:50%;
+bottom:20%;
+
+transform:translate(-50%,-50%);
+
+width:700px;
+
+animation: logoFloat 3s ease-in-out infinite;
+}
+@keyframes logoFloat{
+
+0%{
+    transform:translate(-50%,-50%) scale(1);
+}
+
+50%{
+    transform:translate(-50%,-50%) scale(1.05);
+}
+
+100%{
+    transform:translate(-50%,-50%) scale(1);
+}
+
+}
+#startButton{
+
+position:absolute;
+
+left:50%;
+bottom:10%;
+
+transform:translate(-50%,-50%);
+
+width:200px;
+
+cursor:pointer;
+
+transition:0.3s;
+}
+#startButton:hover{
+
+transform:translate(-50%,-50%) scale(1.1);
+}
+#fullScreenHint{
+
+position:fixed;
+
+bottom:5%;
+
+left:50%;
+
+transform:translateX(-50%);
+
+font-size:24px;
+
+color:rgb(77, 115, 171);
+
+animation: blink 1.5s infinite;
+}
+@keyframes blink{
+
+0%{
+    opacity:1;
+}
+
+50%{
+    opacity:0.3;
+}
+
+100%{
+    opacity:1;
+}
+
+}
+/* ======================
+   海洋交友大师
+====================== */
+
+#guideCharacter{
+
+position:absolute;
+
+left:130px;
+
+top:380px;
+
+width:350px;
+
+opacity:0;
+
+display:none;
+
+z-index:800;
+
+transition:opacity 0.5s ease;
+
+}
+#guideCharacter.show{
+
+opacity:1;
+
+}
+/* =========================
+   主角
+========================= */
+#mcCharacter{
+
+position:absolute;
+
+left:130px;
+
+top:380px;
+
+width:350px;
+
+opacity:0;
+
+display:none;
+
+z-index:800;
+
+transition:opacity 0.5s ease;
+
+}
+#mcCharacter.show{
+
+opacity:1;
+}
+
+/* =========================
+   开场动画
+========================= */
+
+#introVideo{
+
+position:fixed;
+
+left:0;
+top:0;
+
+width:100vw;
+height:100vh;
+
+background:black;
+
+display:none;
+
+z-index:4000;
+}
+
+#opVideo{
+
+width:100%;
+height:100%;
+
+object-fit:contain;
+}
+
+#skipButton{
+
+position:fixed;
+
+top:60px;
+right:50px;
+
+padding:12px 24px;
+
+background:rgba(19, 62, 130, 0.5);
+
+color:white;
+
+border-radius:10px;
+
+cursor:pointer;
+
+font-size:22px;
+
+z-index:5000;
+}
+#eventHint{
+
+position:absolute;
+
+left:50%;
+
+bottom:-100px;
+
+transform:translateX(-50%);
+
+font-size:42px;
+
+font-weight:bold;
+
+color:white;
+
+text-shadow:0 0 10px rgba(0,0,0,0.5);
+
+z-index:1500;
+
+opacity:0;
+
+}
+@keyframes eventAppear{
+
+0%{
+    bottom:-100px;
+    opacity:0;
+}
+
+20%{
+    bottom:250px;
+    opacity:1;
+}
+
+80%{
+    bottom:250px;
+    opacity:1;
+}
+
+100%{
+    bottom:120px;
+    opacity:0;
+}
+
+}
+#dolphin{
+
+position:absolute;
+
+left:1100px;
+
+top:400px;
+
+width:300px;
+
+display:none;
+
+opacity:1;
+
+cursor:pointer;
+
+z-index:200;
+
+}
+
+@keyframes dolphinAppear{
+
+from{
+
+    opacity:0;
+
+}
+
+to{
+
+    opacity:1;
+
+}
+
+}
+
+@keyframes dolphinFloat{
+
+0%{
+    transform:translateY(0px);
+}
+
+50%{
+    transform:translateY(-8px);
+}
+
+100%{
+    transform:translateY(0px);
+}
+
+}
+.dolphinVisible{
+
+animation:
+dolphinAppear 1s forwards,
+dolphinFloat 2.5s ease-in-out infinite;
+
+}
+
+#dolphinDistance{
+
+position:absolute;
+
+left:560px;
+top:430px;
+
+width:300px;
+
+display:none;
+
+cursor:pointer;
+
+z-index:200;
+
+}
+#dolphinDistance.show{
+
+animation:dolphinAppear 1s forwards,
+          dolphinFloat 2.5s ease-in-out infinite;
+
+}
+
+#choicePanel{
+
+position:absolute;
+
+left:50%;
+
+top:50%;
+
+
+transform:translate(-50%,-50%);
+
+display:none;
+
+z-index:2500;
+
+}
+#choicePanel button{
+
+display:block;
+
+width:320px;
+
+background:rgba(255,255,255,0.6);
+
+border:3px solid #5BBCE6;
+
+margin:15px auto;
+
+padding:18px;
+
+font-size:28px;
+
+cursor:pointer;
+
+border-radius:12px;
+
+}
+#chapter2ChoicePanel{
+
+position:absolute;
+
+left:50%;
+top:50%;
+
+transform:translate(-50%,-50%);
+
+display:none;
+
+z-index:2500;
+
+}
+
+#chapter2ChoicePanel button{
+
+display:block;
+
+width:320px;
+
+background:rgba(255,255,255,0.6);
+
+border:3px solid #5BBCE6;
+
+margin:15px auto;
+
+padding:18px;
+
+font-size:28px;
+
+cursor:pointer;
+
+border-radius:12px;
+
+}
+
+#chapter3ChoicePanel{
+
+position:absolute;
+
+left:50%;
+top:50%;
+
+transform:translate(-50%,-50%);
+
+display:none;
+
+z-index:2500;
+
+}
+
+#chapter3ChoicePanel button{
+
+display:block;
+
+width:380px;
+
+background:rgba(255,255,255,0.6);
+
+border:3px solid #5BBCE6;
+
+margin:15px auto;
+
+padding:18px;
+
+font-size:26px;
+
+cursor:pointer;
+
+border-radius:12px;
+
+}
+
+#chapter4ChoicePanel{
+
+position:absolute;
+
+left:50%;
+top:50%;
+
+transform:translate(-50%,-50%);
+
+display:none;
+
+z-index:2500;
+
+}
+
+#chapter4ChoicePanel button{
+
+display:block;
+
+width:420px;
+
+background:rgba(255,255,255,0.6);
+
+border:3px solid #5BBCE6;
+
+margin:15px auto;
+
+padding:18px;
+
+font-size:26px;
+
+cursor:pointer;
+
+border-radius:12px;
+
+}
+
+#dolphin.fadeOut {
+  animation: dolphinFadeOut 0.5s forwards;
+}
+@keyframes dolphinFadeOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+}
+#beachMorning{
+
+position:absolute;
+
+left:0;
+top:0;
+
+width:100%;
+height:100%;
+
+object-fit:cover;
+
+z-index:1;
+
+}
+
+#beachDay{
+
+position:absolute;
+
+left:0;
+top:0;
+
+width:100%;
+height:100%;
+
+object-fit:cover;
+
+z-index:2;
+
+opacity:0;
+
+transition:opacity 2s ease;
+
+}
+
+#bubbleCG{
+
+position:absolute;
+
+left:0;
+top:0;
+
+width:100%;
+height:100%;
+
+object-fit:cover;
+
+z-index:700;
+
+opacity:0;
+
+display:none;
+
+transition:opacity 1s ease;
+
+pointer-events:none;
+
+}
+
+#atSea{
+
+position:absolute;
+
+left:0;
+top:0;
+
+width:100%;
+height:100%;
+
+object-fit:cover;
+
+z-index:3;
+
+opacity:0;
+
+display:none;
+
+transition:opacity 1s ease;
+
+pointer-events:none;
+
+}
+
+#undersea{
+
+position:absolute;
+
+left:0;
+top:0;
+
+width:100%;
+height:100%;
+
+object-fit:cover;
+
+z-index:4;
+
+opacity:0;
+
+display:none;
+
+transition:opacity 1s ease;
+
+pointer-events:none;
+
+}
+
+
+</style>
+</head>
+
+<body>
+    <audio id="bgm" loop>
+        <source src="audio/BGM.mp3" type="audio/mpeg">
+    </audio>
+
+    <audio id="bubblesBgm" loop>
+        <source src="audio/bubblesBGM.mp3" type="audio/mpeg">
+    </audio>
+
+    <div id="mainMenu">
+
+    
+        <img src="images/ui/logo.PNG" id="logo">
+    
+        <img src="images/ui/start.PNG"
+             id="startButton"
+             onclick="startGame()">
+    
+        <div id="fullScreenHint">
+            按F11进入全屏模式获得最佳体验
+        </div>
+        
+        
+        </div>
+    <div id="introVideo">
+
+            <video id="opVideo">
+        
+                <source src="video/op.MP4" type="video/mp4">
+        
+            </video>
+        
+            <div id="skipButton" onclick="skipIntro()">
+                跳过动画
+            </div>
+    </div>
+    <div id="scene" style="display:none;">
+        <img src="images/scene/beach.PNG"
+        id="beachMorning">
+        
+        <img src="images/scene/beachday.PNG"
+        id="beachDay">
+
+        <img src="images/scene/bubbles.PNG"
+        id="bubbleCG">
+
+        <img src="images/scene/atsea.PNG"
+        id="atSea">
+
+        <img src="images/scene/undersea.PNG"
+        id="undersea">
+
+    <img src="images/items/fishingboat.PNG" class="item boat chapter1Object"
+    onclick="checkBoat()">
+
+    <img src="images/items/seabird.PNG" class="item bird chapter1Object"
+    onclick="checkBird()">
+
+    <img src="images/items/shells.PNG" class="item shells chapter1Object"
+    onclick="checkShell()">
+
+    <img src="images/items/footprints.PNG"class="item footprints chapter2Object"
+    onclick="checkFootprints()">
+
+    <img src="images/items/speedboat.PNG"class="item speedboat chapter2Object"
+    onclick="checkSpeedboat()">
+    
+    <img src="images/items/telescope.PNG"class="item telescope chapter2Object"
+    onclick="checkTelescope()">
+
+    <img src="images/items/dolphindistance.PNG"
+     id="dolphinDistance"
+     class="item"
+     onclick="startDistanceEvent()">
+
+    <img src="images/items/dolphinheadout.PNG"
+     id="dolphin"
+     class="item chapter1Object"
+     onclick="startDolphinEvent()">
+    
+     <img src="images/items/dorsalfin.PNG"
+     class="item dorsalfin chapter3Object"
+     onclick="checkDorsalFin()">
+     
+     <img src="images/items/school.PNG"
+     class="item school chapter3Object"
+     onclick="checkSchool()">
+     
+     <img src="images/items/boatfishnet.PNG"
+     class="item boatfishnet chapter3Object"
+     onclick="checkBoatFishnet()">
+
+     <img src="images/items/jellyfish1.PNG"
+     class="item jellyfish chapter4Object"
+     onclick="checkJellyfish()">
+     
+     <img src="images/items/anemone1.PNG"
+     class="item anemone chapter4Object"
+     onclick="checkAnemone()">
+
+     <img src="images/items/noise.PNG"
+     class="item noise chapter4Object"
+     onclick="checkNoise()">
+
+
+    <img src="images/character/mysterywoman.PNG"
+    id="guideCharacter">
+
+    <img src="images/character/MC.PNG"
+    id="mcCharacter">
+
+    <div id="taskScroll" onclick="openChecklist()">
+
+        <img src="images/ui/checklist.PNG">
+    
+        <div id="taskTitle">当前任务：</div>
+        <div id="currentTaskText">找到白海豚</div>
+    
+    </div>
+
+</div>
+<div id="eventHint">
+
+    触发新事件！
+
+</div>
+<div id="dialogBox" onclick="closeDialog()">
+    <div id="dialogTitle"></div>
+    <div id="dialogText"></div>
+
+    <div id="continueHint">
+        点击任意位置继续 ▶
+    </div>
+</div>
+<div id="choicePanel">
+
+    <button onclick="chooseAction('observe')">
+        静静观察
+    </button>
+
+    <button onclick="chooseAction('wave')">
+        向它挥手
+    </button>
+
+    <button onclick="chooseAction('shout')">
+        大声呼喊
+    </button>
+
+</div>
+<div id="chapter2ChoicePanel">
+
+    <button onclick="chooseChapter2Action('leave')">
+        悄悄溜走
+    </button>
+
+    <button onclick="chooseChapter2Action('boat')">
+        乘上快艇
+    </button>
+
+    <button onclick="chooseChapter2Action('sit')">
+        原地坐下
+    </button>
+
+</div>
+
+<div id="chapter3ChoicePanel">
+
+    <button onclick="chooseChapter3Action('warnBoat')">
+        直接提醒渔船船员
+    </button>
+
+    <button onclick="chooseChapter3Action('feedFish')">
+        向白海豚投喂小鱼
+    </button>
+
+    <button onclick="chooseChapter3Action('turnOffEngine')">
+        偷偷关闭渔船引擎
+    </button>
+
+</div>
+
+<div id="chapter4ChoicePanel">
+
+    <button id="cleanPlasticBtn" onclick="chooseChapter4Action('plastic')">
+        帮海豚清除塑料垃圾
+    </button>
+
+    <button id="cleanNetBtn" onclick="chooseChapter4Action('net')">
+        帮海豚清除废弃渔具
+    </button>
+
+    <button id="cleanNoiseBtn" onclick="chooseChapter4Action('noise')">
+        帮海豚隔绝噪声干扰
+    </button>
+
+</div>
+
+<div id="overlay" onclick="closeChecklist()"></div>
+
+<div id="checklistPanel">
+
+    <h2>白海豚交友指南</h2>
+
+    <p id="task1">□ 找到白海豚</p>
+    
+    <p id="task2">□ 让它不害怕你</p>
+
+    <p id="task3">□ 了解它的生活</p>
+
+    <p id="task4">□ 帮它解决麻烦</p>
+
+    <p id="task5">□ 赢得它的信任</p>
+
+</div>
+<script>
+let typingTimer;
+let guideTexts = [
+
+    "首先从探索沙滩区域开始吧！",
+
+    "点击画面内会动的物品，可以查看详情。",
+
+    "打开右下角的任务清单，可以查看全部任务。",
+
+    "不同的行动会影响海豚对你的信任值，请你务必谨慎行动哦。"
+
+];
+
+let guideIndex = 0;
+
+let guideMode = false;
+let isTyping = false;
+let fullText = "";
+let gameStarted = false;
+let boatChecked = false;
+let birdChecked = false;
+let shellChecked = false;
+let footprintsChecked = false;
+let speedboatChecked = false;
+let telescopeChecked = false;
+let distanceEventStarted = false;
+let eventTriggered = false;
+let dolphinDialog = [
+
+"出现了！那就是中华白海豚吗？",
+
+"好好奇啊……要不要凑近看看呢？"
+
+];
+
+let dolphinDialogIndex = 0;
+let dolphinEventStarted = false;
+
+let dolphinMode = false;
+
+let chapterEndMode = false;
+
+function showDialog(title,text){
+
+clearInterval(typingTimer);
+
+fullText = text;
+
+isTyping = true;
+
+document.getElementById("dialogTitle").innerText = title;
+
+document.getElementById("dialogBox").style.display = "block";
+
+let dialogText = document.getElementById("dialogText");
+
+dialogText.innerText = "";
+
+let i = 0;
+
+typingTimer = setInterval(function(){
+
+    dialogText.innerText += text.charAt(i);
+
+    i++;
+
+    if(i >= text.length){
+
+        clearInterval(typingTimer);
+
+        isTyping = false;
+
+    }
+
+},50);
+
+}
+
+function closeDialog(){
+
+let dialogText = document.getElementById("dialogText");
+
+if(isTyping){
+
+    clearInterval(typingTimer);
+
+    dialogText.innerText = fullText;
+
+    isTyping = false;
+
+    return;
+
+}
+
+// 海洋交友大师引导
+
+if(guideMode){
+
+    guideIndex++;
+
+    if(guideIndex < guideTexts.length){
+
+        showGuideText();
+
+        return;
+
+    }
+
+    guideMode = false;
+
+    const guide = document.getElementById("guideCharacter");
+
+    guide.classList.remove("show");
+
+setTimeout(function(){
+
+    guide.style.display = "none";
+
+},500);
+
+
+
+document.getElementById("dialogBox").style.display = "none";
+
+if(
+guideTexts.length == 5 &&
+guideTexts[0] ==
+"哦吼吼～看来你已经找到它了。"
+){
+
+    startChapter2();
+
+}
+if(chapter2EndMode){
+
+chapter2EndMode = false;
+
+prepareChapter3();
+
+}
+return;
+
+}
+if(chapter2MonologueMode){
+
+chapter2MonologueIndex++;
+
+if(chapter2MonologueIndex < chapter2Monologue.length){
+
+    showChapter2Monologue();
+
+    return;
+
+}
+
+chapter2MonologueMode = false;
+
+const mc =
+document.getElementById("mcCharacter");
+
+mc.classList.remove("show");
+
+setTimeout(function(){
+
+    mc.style.display = "none";
+
+},500);
+
+document.getElementById("dialogBox").style.display = "none";
+
+chapter2EndMode = true;
+
+setTimeout(function(){
+
+    guideTexts = [
+
+        "哦吼吼~看样子你已经意识到了让白海豚不再害怕你的正确做法呢，很好很好~",
+
+        "不过还有一个很重要的事情，是无论和谁做朋友都要做的哦？",
+
+        "作为白海豚的“准朋友”的你，这件事很有必要呢，那就是——",
+
+        "了解白海豚的生活！"
+
+    ];
+
+    startGuide();
+
+},1000);
+
+return;
+
+}
+
+// 第三章开头剧情
+
+if(chapter3IntroMode){
+
+chapter3IntroIndex++;
+
+if(
+    chapter3IntroPhase == "beforeCG" &&
+    chapter3IntroIndex < chapter3IntroBeforeCG.length
+){
+
+    showChapter3IntroLine();
+
+    return;
+
+}
+
+if(
+    chapter3IntroPhase == "beforeCG" &&
+    chapter3IntroIndex >= chapter3IntroBeforeCG.length
+){
+
+    document.getElementById("dialogBox").style.display = "none";
+
+    showBubbleCG();
+
+    return;
+
+}
+
+if(
+    chapter3IntroPhase == "afterCG" &&
+    chapter3IntroIndex < chapter3IntroAfterCG.length
+){
+
+    showChapter3IntroLine();
+
+    return;
+
+}
+
+if(
+    chapter3IntroPhase == "afterCG" &&
+    chapter3IntroIndex >= chapter3IntroAfterCG.length
+){
+
+    chapter3IntroMode = false;
+
+    document.getElementById("dialogBox").style.display = "none";
+
+    enterChapter3Scene();
+
+    return;
+
+}
+
+}
+
+// 第三章新事件
+
+if(chapter3EventMode){
+
+chapter3EventIndex++;
+
+if(chapter3EventIndex < chapter3EventDialog.length){
+
+    showChapter3EventDialog();
+
+    return;
+
+}
+
+chapter3EventMode = false;
+
+document.getElementById("chapter3ChoicePanel").style.display = "block";
+
+return;
+
+}
+
+if(chapter3ResultMode){
+
+chapter3ResultIndex++;
+
+if(chapter3ResultIndex < chapter3ResultDialog.length){
+
+    showChapter3ResultDialog();
+
+    return;
+
+}
+
+chapter3ResultMode = false;
+
+startChapter3AfterResult();
+
+return;
+
+}
+
+if(chapter3AfterResultMode){
+
+chapter3AfterResultIndex++;
+
+if(chapter3AfterResultIndex < chapter3AfterResultDialog.length){
+
+    showChapter3AfterResultDialog();
+
+    return;
+
+}
+
+chapter3AfterResultMode = false;
+
+const mc =
+document.getElementById("mcCharacter");
+
+mc.classList.remove("show");
+
+setTimeout(function(){
+
+    mc.style.display = "none";
+
+},500);
+
+document.getElementById("dialogBox").style.display = "none";
+
+setTimeout(function(){
+
+    startChapter3EndGuide();
+
+},1000);
+
+return;
+
+}
+
+// 第三章章末引导
+
+if(chapter3EndGuideMode){
+
+chapter3EndGuideIndex++;
+
+if(chapter3EndGuideIndex < chapter3EndGuideDialog.length){
+
+    showChapter3EndGuideDialog();
+
+    return;
+
+}
+
+chapter3EndGuideMode = false;
+
+hideAllCharacters();
+
+document.getElementById("dialogBox").style.display = "none";
+
+prepareChapter4();
+
+return;
+
+}
+
+// 第四章新事件
+
+if(chapter4EventMode){
+
+chapter4EventIndex++;
+
+if(chapter4EventIndex < chapter4EventDialog.length){
+
+    showChapter4EventDialog();
+
+    return;
+
+}
+
+chapter4EventMode = false;
+
+showChapter4ChoicePanel();
+
+return;
+
+}
+
+// 第四章清理行动结果
+
+if(chapter4ActionResultMode){
+
+chapter4ActionResultMode = false;
+
+document.getElementById("dialogBox").style.display = "none";
+
+if(
+    plasticCleaned &&
+    netCleaned &&
+    noiseCleaned
+){
+
+    // 三个行动都完成后，下一步剧情之后接在这里
+    return;
+
+}
+
+showChapter4ChoicePanel();
+
+return;
+
+}
+
+// 白海豚事件
+
+if(dolphinMode){
+
+    dolphinDialogIndex++;
+
+    if(dolphinDialogIndex < dolphinDialog.length){
+
+        showDolphinDialog();
+
+        return;
+
+    }
+
+    // 第二句结束后显示选项
+    showChoicePanel();
+
+    return;
+
+}
+
+if(distanceMode){
+
+distanceDialogIndex++;
+
+if(distanceDialogIndex < distanceDialog.length){
+
+    showDistanceDialog();
+
+    return;
+
+}
+
+distanceMode = false;
+
+document.getElementById(
+"chapter2ChoicePanel"
+).style.display = "block";
+
+return;
+
+}
+
+document.getElementById("dialogBox").style.display = "none";
+
+if(chapter4EventPending){
+
+startChapter4Event();
+
+return;
+
+}
+
+if(chapter3EventPending){
+
+startChapter3Event();
+
+return;
+
+}
+
+if(chapter2MonologuePending){
+
+chapter2MonologuePending = false;
+
+startChapter2Monologue();
+
+return;
+
+}
+
+if(chapterEndMode){
+
+    chapterEndMode = false;
+
+    setTimeout(function(){
+
+        guideTexts = [
+
+            "哦吼吼～看来你已经找到它了。",
+
+            "如你所见，白海豚可不像你想象中那么容易亲近。",
+
+            "找到它只是第一步。真正的朋友，可不会让对方感到害怕。",
+
+            "你的下一项任务就是——",
+
+            "让白海豚不再害怕你。"
+
+        ];
+
+        startGuide();
+
+    },1000);
+
+}
+
+
+
+}
+const bgm = document.getElementById("bgm");
+
+const bubblesBgm = document.getElementById("bubblesBgm");
+
+function switchToBubblesBGM(){
+
+const oldBgm = document.getElementById("bgm");
+const newBgm = document.getElementById("bubblesBgm");
+
+newBgm.volume = 0;
+newBgm.currentTime = 0;
+newBgm.play();
+
+let fadeTime = 1000;
+let stepTime = 50;
+let steps = fadeTime / stepTime;
+
+let oldVolume = oldBgm.volume;
+let newVolume = 1;
+
+let currentStep = 0;
+
+let fadeTimer = setInterval(function(){
+
+    currentStep++;
+
+    oldBgm.volume = Math.max(
+        0,
+        oldVolume * (1 - currentStep / steps)
+    );
+
+    newBgm.volume = Math.min(
+        1,
+        newVolume * (currentStep / steps)
+    );
+
+    if(currentStep >= steps){
+
+        clearInterval(fadeTimer);
+
+        oldBgm.pause();
+        oldBgm.currentTime = 0;
+        oldBgm.volume = 1;
+
+        newBgm.volume = 1;
+
+    }
+
+},stepTime);
+
+}
+
+
+function openChecklist(){
+
+document.getElementById("overlay").style.display = "block";
+
+document.getElementById("checklistPanel").classList.add("open");
+
+}
+
+function closeChecklist(){
+
+document.getElementById("overlay").style.display = "none";
+
+document.getElementById("checklistPanel").classList.remove("open");
+
+if(chapter3ReadyMode){
+
+    chapter3ReadyMode = false;
+
+    startChapter3();
+
+    return;
+
+}
+
+if(chapter4ReadyMode){
+
+    chapter4ReadyMode = false;
+
+    startChapter4();
+
+    return;
+
+}
+
+}
+
+function startGame(){
+
+document.getElementById("mainMenu").style.display = "none";
+
+document.getElementById("introVideo").style.display = "block";
+
+document.getElementById("opVideo").play();
+
+}
+
+function startGuide(){
+
+guideMode = true;
+
+guideIndex = 0;
+
+const guide = document.getElementById("guideCharacter");
+
+guide.style.display = "block";
+
+setTimeout(function(){
+
+    guide.classList.add("show");
+
+},10);
+
+showGuideText();
+
+}
+function showGuideText(){
+
+showDialog(
+
+    "神秘人",
+
+    guideTexts[guideIndex]
+
+);
+
+}
+function enterGame(){
+
+if(gameStarted) return;
+
+gameStarted = true;
+
+document.getElementById("introVideo").style.display = "none";
+
+document.getElementById("scene").style.display = "block";
+
+startGuide();
+
+document.getElementById("bgm").play();
+
+
+}
+function skipIntro(){
+
+const video = document.getElementById("opVideo");
+
+video.pause();
+video.currentTime = 0;
+enterGame();
+
+}
+document.getElementById("opVideo").addEventListener("ended", function(){
+
+enterGame();
+
+});
+function checkNewEvent(){
+
+if(eventTriggered) return;
+
+if(boatChecked && birdChecked && shellChecked){
+
+    eventTriggered = true;
+
+    const hint = document.getElementById("eventHint");
+
+    hint.style.animation = "eventAppear 3s forwards";
+    const dolphin = document.getElementById("dolphin");
+
+dolphin.style.display = "block";
+
+dolphin.classList.add("dolphinVisible");
+
+}
+
+}
+function checkBoat(){
+
+boatChecked = true;
+
+showDialog(
+    "渔船",
+    "海豚常避开船只产生的噪音。"
+);
+
+checkNewEvent();
+}
+function checkBird(){
+
+birdChecked = true;
+
+showDialog(
+    "海鸟",
+    "海鸟与海豚共享同一片海域生态。"
+);
+
+checkNewEvent();
+}
+function checkShell(){
+
+shellChecked = true;
+
+showDialog(
+    "贝壳",
+    "贝壳能够反映海洋环境的变化。"
+);
+
+checkNewEvent();
+}
+function checkFootprints(){
+
+footprintsChecked = true;
+
+showDialog(
+    "足迹",
+    "看样子似乎有人曾在这里奔跑。"
+);
+
+}
+function checkSpeedboat(){
+
+speedboatChecked = true;
+
+showDialog(
+    "快艇",
+    "快速行驶的船只产生的噪音会干扰白海豚，有时甚至会改变它们的活动路线。"
+);
+
+}
+function checkTelescope(){
+
+telescopeChecked = true;
+
+showDialog(
+    "望远镜",
+    "有经验的观察者通常会用此物以和观察对象保持距离。"
+);
+
+triggerDistanceEvent();
+
+}
+function startDolphinEvent(){
+    if(dolphinEventStarted) return;
+
+dolphinEventStarted = true;
+
+const mc = document.getElementById("mcCharacter");
+
+mc.style.display = "block";
+
+setTimeout(function(){
+
+    mc.classList.add("show");
+
+},10);
+
+dolphinMode = true;
+
+dolphinDialogIndex = 0;
+
+showDolphinDialog();
+
+}
+function showDolphinDialog(){
+
+showDialog(
+
+    "你",
+
+    dolphinDialog[dolphinDialogIndex]
+
+);
+
+}
+function showChoicePanel(){
+
+document.getElementById("choicePanel").style.display = "block";
+
+}
+function chooseAction(action){
+
+document.getElementById("choicePanel").style.display = "none";
+
+dolphinMode = false;
+
+const mc = document.getElementById("mcCharacter");
+
+mc.classList.remove("show");
+
+setTimeout(function(){
+    mc.style.display = "none";
+},500);
+
+const dolphin = document.getElementById("dolphin");
+
+function hideDolphin() {
+    dolphin.classList.add("fadeOut");
+
+    dolphin.addEventListener("animationend", function handler() {
+        dolphin.style.display = "none";
+        dolphin.classList.remove("fadeOut");
+        dolphin.removeEventListener("animationend", handler);
+    });
+}
+
+if(action == "observe"){
+
+    showDialog(
+        "探头的白海豚",
+        "白海豚没有立刻离开，反而缓慢浮出水面，似乎也在观察你。"
+    );
+
+    chapterEndMode = true;
+
+}
+
+else if(action == "wave"){
+
+    hideDolphin();
+
+    showDialog(
+        "探头的白海豚",
+        "白海豚注意到了你，但显然它不明白你的意思，慢慢游走了。"
+    );
+
+    chapterEndMode = true;
+
+}
+
+else if(action == "shout"){
+
+    hideDolphin();
+
+    showDialog(
+        "探头的白海豚",
+        "白海豚受到了惊吓，快速游开了。"
+    );
+
+    chapterEndMode = true;
+}
+
+}
+
+
+function startChapter2(){
+
+// 自动打开任务栏
+openChecklist();
+
+// 第一项任务完成
+document.getElementById("task1").innerHTML =
+"☑ 找到白海豚";
+
+// 卷轴任务更新
+document.getElementById("currentTaskText").innerText =
+"让它不害怕你";
+
+// 第二章背景渐入
+document.getElementById("beachDay").style.opacity = "1";
+
+// 第一章物品隐藏
+document
+.querySelectorAll(".chapter1Object")
+.forEach(obj=>{
+
+    obj.style.display = "none";
+
+});
+
+// 2秒后移除旧背景
+setTimeout(function(){
+
+    document.getElementById("beachMorning").style.display = "none";
+
+},2000);
+
+document
+.querySelectorAll(".chapter2Object")
+.forEach(obj=>{
+
+    obj.style.display = "block";
+
+});
+
+}
+function prepareChapter3(){
+
+// 自动打开任务清单
+openChecklist();
+
+// 第二项任务完成
+document.getElementById("task2").innerHTML =
+"☑ 让它不害怕你";
+
+// 卷轴任务更新
+document.getElementById("currentTaskText").innerText =
+"了解它的生活";
+
+// 等待玩家关闭任务清单后，再正式进入第三章准备状态
+chapter3ReadyMode = true;
+
+}
+
+function prepareChapter4(){
+
+// 自动打开任务清单
+openChecklist();
+
+// 第三项任务完成
+document.getElementById("task3").innerHTML =
+"☑ 了解它的生活";
+
+// 卷轴任务更新
+document.getElementById("currentTaskText").innerText =
+"帮它解决麻烦";
+
+// 等待玩家关闭任务清单后进入第四章
+chapter4ReadyMode = true;
+
+}
+
+function startChapter3(){
+
+// 隐藏第二章普通物品
+document
+.querySelectorAll(".chapter2Object")
+.forEach(obj=>{
+
+    obj.style.display = "none";
+
+});
+
+// 隐藏第二章事件白海豚
+const dolphinDistance =
+document.getElementById("dolphinDistance");
+
+dolphinDistance.style.display = "none";
+dolphinDistance.classList.remove("show");
+
+// 开始第三章开头剧情
+startChapter3Intro();
+
+}
+
+function startChapter4(){
+
+// 隐藏第三章物品
+document
+.querySelectorAll(".chapter3Object")
+.forEach(obj=>{
+
+    obj.style.display = "none";
+
+});
+
+// 隐藏第三章背景
+const atSea =
+document.getElementById("atSea");
+
+atSea.style.opacity = "0";
+
+setTimeout(function(){
+
+    atSea.style.display = "none";
+
+},1000);
+
+// 显示第四章背景
+const undersea =
+document.getElementById("undersea");
+
+undersea.style.display = "block";
+
+setTimeout(function(){
+
+    undersea.style.opacity = "1";
+
+},10);
+
+document
+.querySelectorAll(".chapter4Object")
+.forEach(obj=>{
+
+    obj.style.display = "block";
+
+});
+
+}
+
+function checkJellyfish(){
+
+jellyfishChecked = true;
+
+const jellyfish =
+document.querySelector(".jellyfish");
+
+jellyfish.style.opacity = "0";
+
+setTimeout(function(){
+
+    jellyfish.src =
+    "images/items/jellyfish2.PNG";
+
+    jellyfish.style.opacity = "1";
+
+},300);
+
+showDialog(
+    "水母？",
+    "只是看起来像水母一样的塑料垃圾袋。"
+);
+
+checkChapter4NewEvent();
+
+}
+
+function checkAnemone(){
+
+anemoneChecked = true;
+
+const anemone =
+document.querySelector(".anemone");
+
+anemone.style.opacity = "0";
+
+setTimeout(function(){
+
+    anemone.src =
+    "images/items/anemone2.PNG";
+
+    anemone.style.opacity = "1";
+
+},300);
+
+showDialog(
+    "海葵？",
+    "只是看起来像海葵一样的废弃渔网绳。"
+);
+
+checkChapter4NewEvent();
+
+}
+
+function checkNoise(){
+
+noiseChecked = true;
+
+showDialog(
+    "噪音声波",
+    "混杂着船只引擎轰鸣声、施工设施声、人群嬉闹声等等各种噪声的声波，会干扰海豚的寻路定位。"
+);
+
+checkChapter4NewEvent();
+
+}
+
+function checkChapter4NewEvent(){
+
+if(chapter4EventTriggered) return;
+
+if(
+    jellyfishChecked &&
+    anemoneChecked &&
+    noiseChecked
+){
+
+    chapter4EventTriggered = true;
+
+    chapter4EventPending = true;
+
+}
+
+}
+
+function startChapter4Event(){
+
+chapter4EventPending = false;
+
+chapter4EventMode = true;
+
+chapter4EventIndex = 0;
+
+const hint =
+document.getElementById("eventHint");
+
+hint.style.animation = "none";
+
+void hint.offsetWidth;
+
+hint.style.animation =
+"eventAppear 3s forwards";
+
+document
+.querySelectorAll(".chapter4Object")
+.forEach(obj=>{
+
+    obj.onclick = null;
+
+});
+
+const mc =
+document.getElementById("mcCharacter");
+
+mc.style.display = "block";
+
+setTimeout(function(){
+
+    mc.classList.add("show");
+
+},10);
+
+showChapter4EventDialog();
+
+}
+
+function showChapter4EventDialog(){
+
+showDialog(
+
+    "你",
+
+    chapter4EventDialog[chapter4EventIndex]
+
+);
+
+}
+
+function showChapter4ChoicePanel(){
+
+const panel =
+document.getElementById("chapter4ChoicePanel");
+
+panel.style.display = "block";
+
+document.getElementById("cleanPlasticBtn").style.display =
+plasticCleaned ? "none" : "block";
+
+document.getElementById("cleanNetBtn").style.display =
+netCleaned ? "none" : "block";
+
+document.getElementById("cleanNoiseBtn").style.display =
+noiseCleaned ? "none" : "block";
+
+}
+
+function chooseChapter4Action(action){
+
+document.getElementById("chapter4ChoicePanel").style.display = "none";
+
+if(action == "plastic"){
+
+    plasticCleaned = true;
+
+    const jellyfish =
+    document.querySelector(".jellyfish");
+
+    jellyfish.classList.add("fadeAway");
+
+    chapter4ActionResultTitle =
+    "塑料垃圾";
+
+    chapter4ActionResultText =
+    "你清理掉了难以降解的塑料垃圾，使白海豚免受误食塑料之灾。";
+
+}
+
+else if(action == "net"){
+
+    netCleaned = true;
+
+    const anemone =
+    document.querySelector(".anemone");
+
+    anemone.classList.add("fadeAway");
+
+    chapter4ActionResultTitle =
+    "废弃渔具";
+
+    chapter4ActionResultText =
+    "你清理掉了随意丢弃在大海里的废渔具，使白海豚免于被渔具误伤。";
+
+}
+
+else if(action == "noise"){
+
+    noiseCleaned = true;
+
+    const noise =
+    document.querySelector(".noise");
+
+    noise.classList.add("fadeAway");
+
+    chapter4ActionResultTitle =
+    "噪音声波";
+
+    chapter4ActionResultText =
+    "你用神秘人给的魔法泡泡隔绝了噪声，使得白海豚的声纳系统恢复功能，白海豚们再也不怕会迷路了。";
+
+}
+
+chapter4ActionResultMode = true;
+
+showDialog(
+    chapter4ActionResultTitle,
+    chapter4ActionResultText
+);
+
+}
+
+function startChapter3Intro(){
+
+chapter3IntroMode = true;
+
+chapter3IntroIndex = 0;
+
+chapter3IntroPhase = "beforeCG";
+
+showChapter3IntroLine();
+
+}
+function showChapter3IntroLine(){
+
+let currentLine;
+
+if(chapter3IntroPhase == "beforeCG"){
+
+    currentLine =
+    chapter3IntroBeforeCG[chapter3IntroIndex];
+
+    showCharacterForSpeaker(currentLine.title);
+
+    showDialog(
+        currentLine.title,
+        currentLine.text
+    );
+
+}
+
+else if(chapter3IntroPhase == "afterCG"){
+
+    currentLine =
+    chapter3IntroAfterCG[chapter3IntroIndex];
+
+    hideAllCharacters();
+
+    showDialog(
+        currentLine.title,
+        currentLine.text
+    );
+
+}
+
+}
+
+function showCharacterForSpeaker(speaker){
+
+const mc =
+document.getElementById("mcCharacter");
+
+const guide =
+document.getElementById("guideCharacter");
+
+if(speaker == "你"){
+
+    guide.classList.remove("show");
+
+    setTimeout(function(){
+
+        guide.style.display = "none";
+
+    },300);
+
+    mc.style.display = "block";
+
+    setTimeout(function(){
+
+        mc.classList.add("show");
+
+    },10);
+
+}
+
+else{
+
+    mc.classList.remove("show");
+
+    setTimeout(function(){
+
+        mc.style.display = "none";
+
+    },300);
+
+    guide.style.display = "block";
+
+    setTimeout(function(){
+
+        guide.classList.add("show");
+
+    },10);
+
+}
+
+}
+
+function hideAllCharacters(){
+
+const mc =
+document.getElementById("mcCharacter");
+
+const guide =
+document.getElementById("guideCharacter");
+
+mc.classList.remove("show");
+guide.classList.remove("show");
+
+setTimeout(function(){
+
+    mc.style.display = "none";
+    guide.style.display = "none";
+
+},300);
+
+}
+
+function showBubbleCG(){
+
+hideAllCharacters();
+
+const cg =
+document.getElementById("bubbleCG");
+
+cg.style.display = "block";
+
+switchToBubblesBGM();
+
+setTimeout(function(){
+
+    cg.style.opacity = "1";
+
+},10);
+
+setTimeout(function(){
+
+    chapter3IntroPhase = "afterCG";
+
+    chapter3IntroIndex = 0;
+
+    showChapter3IntroLine();
+
+},1000);
+
+}
+
+function enterChapter3Scene(){
+
+// 隐藏CG
+const cg =
+document.getElementById("bubbleCG");
+
+cg.style.opacity = "0";
+
+setTimeout(function(){
+
+    cg.style.display = "none";
+
+},1000);
+
+// 显示第三章背景
+const atSea =
+document.getElementById("atSea");
+
+atSea.style.display = "block";
+
+setTimeout(function(){
+
+    atSea.style.opacity = "1";
+
+},10);
+
+// 显示第三章物品
+document
+.querySelectorAll(".chapter3Object")
+.forEach(obj=>{
+
+    obj.style.display = "block";
+
+});
+
+}
+
+function checkDorsalFin(){
+
+dorsalFinChecked = true;
+
+const dorsal =
+document.querySelector(".dorsalfin");
+
+dorsal.style.opacity = "0";
+
+setTimeout(function(){
+
+    dorsal.style.opacity = "1";
+
+},2000);
+
+showDialog(
+    "白海豚的背鳍",
+    "它似乎不打算回应你，看样子它正忙着一些事情？"
+);
+
+checkChapter3NewEvent();
+
+}
+
+function checkBoatFishnet(){
+
+boatFishnetChecked = true;
+
+showDialog(
+    "撒网的渔船",
+    "渔网上挂着几条小鱼和海草，似乎是白海豚们爱吃的食物。"
+);
+
+checkChapter3NewEvent();
+
+}
+
+function checkSchool(){
+
+schoolChecked = true;
+
+showDialog(
+    "鱼群",
+    "一群小鱼在海面下快速游动，也许是在躲避着什么。"
+);
+
+checkChapter3NewEvent();
+
+}
+
+function checkChapter3NewEvent(){
+
+if(chapter3EventTriggered) return;
+
+if(
+    dorsalFinChecked &&
+    schoolChecked &&
+    boatFishnetChecked
+){
+
+    chapter3EventTriggered = true;
+
+    chapter3EventPending = true;
+
+}
+
+}
+
+function startChapter3Event(){
+
+chapter3EventPending = false;
+
+chapter3EventMode = true;
+
+chapter3EventIndex = 0;
+
+const hint =
+document.getElementById("eventHint");
+
+hint.style.animation = "none";
+
+void hint.offsetWidth;
+
+hint.style.animation =
+"eventAppear 3s forwards";
+
+const mc =
+document.getElementById("mcCharacter");
+
+mc.style.display = "block";
+
+setTimeout(function(){
+
+    mc.classList.add("show");
+
+},10);
+
+showChapter3EventDialog();
+
+}
+
+function showChapter3EventDialog(){
+
+showDialog(
+
+    "你",
+
+    chapter3EventDialog[chapter3EventIndex]
+
+);
+
+}
+
+function chooseChapter3Action(action){
+
+document.getElementById("chapter3ChoicePanel").style.display = "none";
+
+const mc =
+document.getElementById("mcCharacter");
+
+mc.classList.remove("show");
+
+setTimeout(function(){
+
+    mc.style.display = "none";
+
+},500);
+
+const dorsal =
+document.querySelector(".dorsalfin");
+
+const school =
+document.querySelector(".school");
+
+const boat =
+document.querySelector(".boatfishnet");
+
+if(action == "warnBoat"){
+
+    boat.classList.add("fadeAway");
+
+    dorsal.classList.add("dorsalFast");
+
+    chapter3ResultDialog = [
+
+        {
+            title:"撒网的渔船",
+            text:"渔船上的船员被漂浮在空中的你吓了一大跳，连忙开着渔船加速逃走了。"
+        },
+
+        {
+            title:"撒网的渔船",
+            text:"突然加大的引擎声也吓到了白海豚，它开始惊慌失措地乱游。"
+        }
+
+    ];
+
+    chapter3AfterResultDialog = [
+
+        "哦不，虽然渔船开走了，但白海豚也被吓到了……",
+
+        "难不成，渔网上的小鱼们才是白海豚的食物？看来是我误会了啊……"
+
+    ];
+
+}
+
+else if(action == "feedFish"){
+
+    school.classList.add("fadeAway");
+
+    chapter3ResultDialog = [
+
+        {
+            title:"白海豚",
+            text:"白海豚并未察觉你的动作，反而是鱼群被你惊扰了，四散开来。"
+        }
+
+    ];
+
+    chapter3AfterResultDialog = [
+
+        "哦不，鱼群散开了……咦？白海豚们怎么没有反应？",
+
+        "难道说，白海豚的目标不是这些鱼群，而是跟随渔船吃渔网上的小鱼吗？"
+
+    ];
+
+}
+
+else if(action == "turnOffEngine"){
+
+    dorsal.classList.remove("dorsalFast");
+
+    dorsal.classList.add("dorsalToBoat");
+
+    dorsal.style.left = "900px";
+    dorsal.style.top = "480px";
+
+    setTimeout(function(){
+
+        dorsal.classList.remove("dorsalToBoat");
+
+        dorsal.classList.add("dorsalFloat");
+
+    },2000);
+
+    chapter3ResultDialog = [
+
+        {
+            title:"撒网的渔船",
+            text:"你悄悄飞到了渔船内部，将渔船的发动机关掉了。"
+        },
+
+        {
+            title:"撒网的渔船",
+            text:"噪音随之减弱了不少，附近的白海豚竟纷纷凑了过来。"
+        }
+
+    ];
+
+    chapter3AfterResultDialog = [
+
+        "白海豚怎么都往渔船这边游过来了？",
+
+        "难道它们的目标……从一开始就是渔网上的小鱼吗？"
+
+    ];
+
+}
+
+
+
+chapter3ResultMode = true;
+
+chapter3ResultIndex = 0;
+
+showChapter3ResultDialog();
+
+}
+
+function showChapter3ResultDialog(){
+
+showDialog(
+
+    chapter3ResultDialog[chapter3ResultIndex].title,
+
+    chapter3ResultDialog[chapter3ResultIndex].text
+
+);
+
+}
+
+function startChapter3AfterResult(){
+
+chapter3AfterResultMode = true;
+
+chapter3AfterResultIndex = 0;
+
+const mc =
+document.getElementById("mcCharacter");
+
+mc.style.display = "block";
+
+setTimeout(function(){
+
+mc.classList.add("show");
+
+},10);
+
+showChapter3AfterResultDialog();
+
+}
+
+function showChapter3AfterResultDialog(){
+
+showDialog(
+
+"你",
+
+chapter3AfterResultDialog[chapter3AfterResultIndex]
+
+);
+
+}
+
+function startChapter3EndGuide(){
+
+chapter3EndGuideMode = true;
+
+chapter3EndGuideIndex = 0;
+
+showChapter3EndGuideDialog();
+
+}
+
+function showChapter3EndGuideDialog(){
+
+const currentLine =
+chapter3EndGuideDialog[chapter3EndGuideIndex];
+
+showCharacterForSpeaker(currentLine.title);
+
+showDialog(
+    currentLine.title,
+    currentLine.text
+);
+
+}
+
+document.addEventListener("keydown", function(e){
+
+if(e.key == "q"){
+
+    document.getElementById("mainMenu").style.display = "none";
+    document.getElementById("introVideo").style.display = "none";
+    document.getElementById("scene").style.display = "block";
+
+    startChapter2();
+
+}
+
+if(e.key == "e"){
+
+    document.getElementById("mainMenu").style.display = "none";
+    document.getElementById("introVideo").style.display = "none";
+    document.getElementById("scene").style.display = "block";
+
+    startChapter2();
+
+    setTimeout(function(){
+
+        prepareChapter3();
+
+    },100);
+
+}
+
+if(e.key == "r"){
+
+document.getElementById("mainMenu").style.display = "none";
+document.getElementById("introVideo").style.display = "none";
+document.getElementById("scene").style.display = "block";
+
+// 直接设置到第三章背景状态
+document.getElementById("beachDay").style.opacity = "1";
+document.getElementById("atSea").style.display = "block";
+document.getElementById("atSea").style.opacity = "1";
+
+// 隐藏前面章节物品
+document
+.querySelectorAll(".chapter1Object")
+.forEach(obj=>{
+
+    obj.style.display = "none";
+
+});
+
+document
+.querySelectorAll(".chapter2Object")
+.forEach(obj=>{
+
+    obj.style.display = "none";
+
+});
+
+document
+.querySelectorAll(".chapter3Object")
+.forEach(obj=>{
+
+    obj.style.display = "none";
+
+});
+
+const dolphinDistance =
+document.getElementById("dolphinDistance");
+
+dolphinDistance.style.display = "none";
+
+// 关键：清掉第三章准备状态，防止关闭清单后又进第三章剧情
+chapter3ReadyMode = false;
+
+// 打开第四章任务清单
+prepareChapter4();
+
+}
+
+});
+
+function triggerDistanceEvent(){
+
+if(distanceEventStarted) return;
+
+distanceEventStarted = true;
+
+const hint =
+document.getElementById("eventHint");
+
+hint.style.animation = "none";
+
+void hint.offsetWidth;
+
+hint.style.animation =
+"eventAppear 3s forwards";
+
+const dolphin =
+document.getElementById("dolphinDistance");
+
+dolphin.style.display = "block";
+
+dolphin.classList.add("show");
+
+}
+let distanceDialog = [
+
+"白海豚游了好远啊……是在害怕我吗？",
+
+"我该怎么做才能让它知道，我想和它交朋友……"
+
+];
+
+let distanceDialogIndex = 0;
+
+let distanceMode = false;
+
+let distanceEventFinished = false;
+let chapter2Monologue = [];
+let chapter2MonologueIndex = 0;
+let chapter2MonologueMode = false;
+let chapter2MonologuePending = false;
+let chapter2EndMode = false;
+let chapter3ReadyMode = false;
+let chapter3IntroMode = false;
+let chapter3IntroIndex = 0;
+let chapter3IntroPhase = "beforeCG";
+let dorsalFinChecked = false;
+let schoolChecked = false;
+let boatFishnetChecked = false;
+
+let chapter3EventTriggered = false;
+let chapter3EventPending = false;
+
+let chapter3EventMode = false;
+let chapter3EventIndex = 0;
+let chapter3ResultMode = false;
+let chapter3ResultIndex = 0;
+let chapter3ResultDialog = [];
+
+let chapter3AfterResultMode = false;
+let chapter3AfterResultIndex = 0;
+let chapter3AfterResultDialog = [];
+
+let jellyfishChecked = false;
+let anemoneChecked = false;
+let noiseChecked = false;
+
+let chapter4EventTriggered = false;
+let chapter4EventPending = false;
+
+let chapter4EventMode = false;
+let chapter4EventIndex = 0;
+
+let chapter4EventDialog = [
+
+    "哦不……看似光鲜亮丽的水下环境，实则早就变成一片废墟了啊……",
+
+    "生活在这里的白海豚们也太可怜了……作为朋友，我应该为它们做点什么！"
+
+];
+
+let chapter4ActionResultMode = false;
+let chapter4ActionResultTitle = "";
+let chapter4ActionResultText = "";
+
+let plasticCleaned = false;
+let netCleaned = false;
+let noiseCleaned = false;
+
+let chapter3EndGuideMode = false;
+let chapter3EndGuideIndex = 0;
+
+let chapter4ReadyMode = false;
+
+let chapter3EventDialog = [
+
+    "咦？白海豚似乎跟随鱼群游过去了。",
+
+    "可是那边有正在撒网的渔船呢……",
+
+    "它是在寻找食物，还是遇到了危险？"
+
+];
+
+let chapter3EndGuideDialog = [
+
+    {
+        title:"神秘人",
+        text:"哦吼吼~白海豚的生活方式和你想象中的是否一样呢？"
+    },
+
+    {
+        title:"神秘人",
+        text:"无论结果如何，我很高兴你愿意了解白海豚们的生活。"
+    },
+
+    {
+        title:"神秘人",
+        text:"如果能有更多的人类愿意以善意走近白海豚，就会有更多的白海豚愿意与人类友好相处呢……"
+    },
+
+    {
+        title:"你",
+        text:"你为什么这么了解白海豚？你到底是谁？"
+    },
+
+    {
+        title:"神秘人",
+        text:"你马上就能知道了。但在此之前，你还有很重要的任务在身哦。"
+    },
+
+    {
+        title:"神秘人",
+        text:"人类的活动虽并非恶意，但有时会为白海豚带来很大的麻烦呢……"
+    },
+
+    {
+        title:"神秘人",
+        text:"现在，是时候让你——"
+    },
+
+    {
+        title:"神秘人",
+        text:"帮白海豚解决麻烦了。"
+    }
+
+];
+
+function startDistanceEvent(){
+
+if(distanceEventFinished) return;
+if(distanceMode) return;
+
+distanceMode = true;
+
+distanceDialogIndex = 0;
+
+const mc =
+document.getElementById("mcCharacter");
+
+mc.style.display = "block";
+
+setTimeout(function(){
+
+    mc.classList.add("show");
+
+},10);
+
+showDistanceDialog();
+
+}
+function showDistanceDialog(){
+
+showDialog(
+
+    "你",
+
+    distanceDialog[distanceDialogIndex]
+
+);
+
+}
+function startChapter2Monologue(){
+
+chapter2MonologueMode = true;
+
+chapter2MonologueIndex = 0;
+
+const mc =
+document.getElementById("mcCharacter");
+
+mc.style.display = "block";
+
+setTimeout(function(){
+
+    mc.classList.add("show");
+
+},10);
+
+showChapter2Monologue();
+
+}
+function showChapter2Monologue(){
+
+showDialog(
+
+    "你",
+
+    chapter2Monologue[chapter2MonologueIndex]
+
+);
+
+}
+function chooseChapter2Action(action){
+distanceEventFinished = true;
+
+const mc =
+document.getElementById("mcCharacter");
+
+mc.classList.remove("show");
+
+setTimeout(function(){
+
+    mc.style.display = "none";
+
+},500);
+
+document.getElementById(
+"chapter2ChoicePanel"
+).style.display = "none";
+
+const dolphin =
+document.getElementById("dolphinDistance");
+
+if(action == "leave"){
+
+dolphin.src =
+"images/items/dolphindistanceaway.PNG";
+
+showDialog(
+    "望远镜里的白海豚",
+    "白海豚看你走远了，它也慢慢回到了海里。"
+);
+
+chapter2Monologue = [
+    "哦……它又走了……",
+    "但至少它没有那么害怕我了……吧？"
+];
+
+chapter2MonologuePending = true;
+
+dolphin.onclick = null;
+
+}
+
+else if(action == "boat"){
+
+dolphin.src =
+"images/items/dolphindistanceaway.PNG";
+
+showDialog(
+    "望远镜里的白海豚",
+    "白海豚被你突如其来的追赶吓得惊慌失措，连忙逃走了……"
+);
+
+chapter2Monologue = [
+    "哦不！显然快艇吓到了它……",
+    "这之后可不能再鲁莽行动了，毕竟我是来交朋友的嘛……"
+];
+
+chapter2MonologuePending = true;
+
+dolphin.onclick = null;
+
+}
+
+else if(action == "sit"){
+
+dolphin.src =
+"images/items/dolphindistancerelax.PNG";
+
+showDialog(
+    "望远镜里的白海豚",
+    "白海豚似乎察觉到你的放松状态，它也放松了下来。"
+);
+
+chapter2Monologue = [
+    "太好了，白海豚放松下来了！",
+    "和白海豚交朋友的进展很顺利呢！"
+];
+
+chapter2MonologuePending = true;
+
+dolphin.onclick = null;
+
+}
+
+}
+let chapter3IntroBeforeCG = [
+
+    {
+        title:"你",
+        text:"啊，白海豚游远了，已经看不到了……"
+    },
+
+    {
+        title:"神秘人",
+        text:"哦吼吼~它们这是要回家吃饭了吧。"
+    },
+
+    {
+        title:"你",
+        text:"我还没和它们成为朋友呢，这可怎么办？"
+    },
+
+    {
+        title:"神秘人",
+        text:"别着急，我有办法。"
+    }
+
+];
+
+let chapter3IntroAfterCG = [
+
+    {
+        title:"你",
+        text:"哇，飞起来了！怎么做到的？！"
+    },
+
+    {
+        title:"神秘人",
+        text:"哦吼吼~这个嘛，现在还不能告诉你哦。"
+    },
+
+    {
+        title:"神秘人",
+        text:"总之现在先带你去白海豚生活的海面上方吧，别忘了小心观察，别打扰到白海豚们哦。"
+    }
+
+];
+</script>
+
+
+</body>
+</html>
